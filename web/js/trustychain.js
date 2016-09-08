@@ -56,6 +56,7 @@ var accountAddress = web3.eth.accounts;
 
 web3.eth.defaultAccount = web3.eth.accounts[0];
 
+var lastCommunity = community.communitiesToOwner(web3.eth.accounts[0]);
 
 function createCampaign(name, description, image){
     campaign.createComunity(communityId, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
@@ -74,7 +75,9 @@ function createCommunity(_name, _description){
         } else {
             alert("Deu ruim");
         }
-    })
+    });
 }
 
-//  createCommunity();
+function addMember() {
+    
+}
