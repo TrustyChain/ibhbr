@@ -78,6 +78,17 @@ function createCommunity(_name, _description){
     });
 }
 
-function addMember() {
-    
+function addMember(_communityId, _member, _name) {
+     community.addMember(web3.fromAscii(_communityId), web3.fromAscii(_member.value), web3.fromAscii(_name.value), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+        console.dir(arguments);
+        if(!error){
+          alert('Membro adicionado com Sucesso');
+          _communityId.value = '';
+            _member.value = '';
+            _name.value = '';
+            //window.location.href = "index.html";
+        } else {
+            alert("Deu ruim");
+        }
+    });
 }
