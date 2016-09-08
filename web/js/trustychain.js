@@ -47,7 +47,7 @@ var communityContract = web3.eth.contract(abiCommunityContract);
 var community = communityContract.at(communityAddress);
 
 var campaignContract = web3.eth.contract(abiCampaignContract);
-var campaign = communityContract.at(campaignAddress);
+var campaign = campaignContract.at(campaignAddress);
 
 /* Inicializa conexão com o node local */
 web3.setProvider(new web3.providers.HttpProvider());
@@ -59,10 +59,11 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 var lastCommunity = community.communitiesToOwner(web3.eth.accounts[0]);
 
 function createCampaign(name, description, image){
-    campaign.createComunity(lastCommunity, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+    campaign.createCampaign(lastCommunity, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+        console.dir(arguments);
         if(!error){
             alert("Campanha criado com sucesso");
-            windown.location.href = "addColaborador.html";
+            window.location.href = "addColaborador.html";
         } else {
             alert("Deu muito ruim");
         }
