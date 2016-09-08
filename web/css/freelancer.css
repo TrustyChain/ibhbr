@@ -189,6 +189,10 @@ section.success {
   background: #18BC9C;
   color: white;
 }
+
+select {
+    height: 58px; !important
+}
 @media (max-width: 767px) {
   section {
     padding: 75px 0;

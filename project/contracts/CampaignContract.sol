@@ -1,4 +1,4 @@
- contract communityContract {
+contract communityContract {
   mapping (address => uint) public communitiesToOwner;
   function getMemberName(uint communityId, address _member) returns(bytes32) {}
 }
@@ -100,6 +100,11 @@ contract CampaignContract {
   function addCollaborateToCampaign(uint _campaign, uint _collaborate) internal {
     uint[] campaignToCollaboratesIds = campaignToCollaborates[_campaign];
     campaignToCollaborates[_campaign][campaignToCollaboratesIds.length++] = _collaborate;  
+  }
+
+  function countCampaigns(address current) returns(uint){
+    uint[] ids = ownerToCampaigns[current];
+    return ids.length;
   }
 
   function donateToCampaign(uint _campaign, uint amount) campaignIsNotDone(_campaign) {

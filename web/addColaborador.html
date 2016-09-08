@@ -53,11 +53,7 @@
                     <li class="page-scroll">
                         <a href="index.html">Home</a>
                     </li>
-                    </li>
-                    <li class="page-scroll">
-                        <a href="campanha.html">Nova Campanha</a>
-                    </li>
-                </ul>
+                  </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -68,7 +64,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2>Comunidade</h2>
+                    <h2>Colaborador</h2>
                     <hr class="star-primary">
                 </div>
             </div>
@@ -79,15 +75,27 @@
                     <form name="sentMessage" id="contactForm" novalidate action="/">
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Nome da Comunidade</label>
-                                <input type="text" class="form-control" placeholder="Nome da Comunidade" id="nome" required data-validation-required-message="Nome da comunidade obrigatorio.">
+                                <select class="form-control" id="campaigns"></select>
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Descrição da Comunidade</label>
+                                <select class="form-control" id="collaborator"></select>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Descrição da Colaborador</label>
                                 <textarea rows="5" class="form-control" placeholder="Descrição" id="description" required data-validation-required-message="Descrição obrigatoria."></textarea>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Valor do Colaborador</label>
+                                <input class="form-control" placeholder="Valor" id="amount" required data-validation-required-message="Valor obrigatoria."></input>
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
@@ -95,7 +103,7 @@
                         <div id="success"></div>
                         <div class="row">
                             <div class="form-group col-xs-12">
-                                <button class="btn btn-success btn-lg" onclick="createCommunity(nome, description)">Enviar</button>
+                                <button class="btn btn-success btn-lg" onclick="addCollaborate(campaign, collaborator, description, amount)">Enviar</button>
                             </div>
                         </div>
                     </form>
@@ -166,15 +174,15 @@
 
     <!-- Contact Form JavaScript -->
     <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
 
     <!-- Theme JavaScript -->
-    <script src="js/freelancer.min.js"></script>
     <script type="text/javascript" src="js/web3.js"></script>
     <script type="text/javascript" src="js/lightwallet.js"></script>
     <script type="text/javascript" src="js/hooked-web3-provider.js"></script>
     <script type="text/javascript" src="js/trustychain.js"></script>
-
+    <script type="text/javascript">
+      popularColaboradores();
+    </script>
 </body>
 
 </html>

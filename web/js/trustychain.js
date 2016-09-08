@@ -29,18 +29,14 @@ var signing = lightwallet.signing;
 var encryption = lightwallet.encryption;
 
 
-//Renato
-var communityAddress = '0xa5a886bdba40e3906371ce8066faef90b2adedce';
-var campaignAddress = '';
-
-//Eduardo
 var communityAddress = '0xdC3B778F1459EDa14c5e6bA4BE55f25244AadE62';
-var campaignAddress = '0x6B312C8bF724C153777d15565181763ad328B72c';
+var campaignAddress = '0x1070b735D064238F12cF62C7F1eE9D1FA094CFd0';
 
 var abiCommunityContract = [{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"communitiesToOwner","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"communityId","type":"uint256"},{"name":"_member","type":"address"},{"name":"_name","type":"bytes32"}],"name":"addMember","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"bytes32"},{"name":"_description","type":"bytes32"}],"name":"createComunity","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"members","outputs":[{"name":"uuid","type":"uint256"},{"name":"owner","type":"address"},{"name":"name","type":"bytes32"}],"type":"function"},{"constant":false,"inputs":[{"name":"communityId","type":"uint256"},{"name":"_member","type":"address"}],"name":"getMemberName","outputs":[{"name":"","type":"bytes32"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"communitiesToMembers","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"communities","outputs":[{"name":"uuid","type":"uint256"},{"name":"owner","type":"address"},{"name":"name","type":"bytes32"},{"name":"description","type":"bytes32"}],"type":"function"}];
 
 
-var abiCampaignContract = [{"constant":false,"inputs":[{"name":"_campaign","type":"uint256"}],"name":"concludeCampaign","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"campaigns","outputs":[{"name":"uuid","type":"uint256"},{"name":"communityId","type":"uint256"},{"name":"owner","type":"address"},{"name":"name","type":"bytes32"},{"name":"description","type":"bytes32"},{"name":"image","type":"bytes32"},{"name":"amountNeed","type":"uint256"},{"name":"amountReceive","type":"uint256"},{"name":"done","type":"bool"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"collaborators","outputs":[{"name":"uuid","type":"uint256"},{"name":"owner","type":"address"},{"name":"name","type":"bytes32"},{"name":"description","type":"bytes32"},{"name":"amount","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_campaign","type":"uint256"},{"name":"amount","type":"uint256"}],"name":"donateToCampaign","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"campaignToCollaborates","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_campaign","type":"uint256"},{"name":"_collaborator","type":"address"},{"name":"_description","type":"bytes32"},{"name":"_amount","type":"uint256"}],"name":"addCollaborate","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"_community","type":"uint256"},{"name":"_name","type":"bytes32"},{"name":"_description","type":"bytes32"},{"name":"_image","type":"bytes32"}],"name":"createCampaign","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"community","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"ownerToCampaigns","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"inputs":[{"name":"_community","type":"address"}],"type":"constructor"}];
+var abiCampaignContract = [{"constant":false,"inputs":[{"name":"_campaign","type":"uint256"}],"name":"concludeCampaign","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"campaigns","outputs":[{"name":"uuid","type":"uint256"},{"name":"communityId","type":"uint256"},{"name":"owner","type":"address"},{"name":"name","type":"bytes32"},{"name":"description","type":"bytes32"},{"name":"image","type":"bytes32"},{"name":"amountNeed","type":"uint256"},{"name":"amountReceive","type":"uint256"},{"name":"done","type":"bool"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"collaborators","outputs":[{"name":"uuid","type":"uint256"},{"name":"owner","type":"address"},{"name":"name","type":"bytes32"},{"name":"description","type":"bytes32"},{"name":"amount","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_campaign","type":"uint256"},{"name":"amount","type":"uint256"}],"name":"donateToCampaign","outputs":[],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"campaignToCollaborates","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"current","type":"address"}],"name":"countCampaigns","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":false,"inputs":[{"name":"_campaign","type":"uint256"},{"name":"_collaborator","type":"address"},{"name":"_description","type":"bytes32"},{"name":"_amount","type":"uint256"}],"name":"addCollaborate","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"_community","type":"uint256"},{"name":"_name","type":"bytes32"},{"name":"_description","type":"bytes32"},{"name":"_image","type":"bytes32"}],"name":"createCampaign","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"community","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"ownerToCampaigns","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"inputs":[{"name":"_community","type":"address"}],"type":"constructor"}];
+
 
 /* Carregamento dos Contratos */
 var communityContract = web3.eth.contract(abiCommunityContract);
@@ -58,8 +54,8 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 
 var lastCommunity = community.communitiesToOwner(web3.eth.accounts[0]);
 
-function createCampaign(name, description, image){
-    campaign.createCampaign(lastCommunity, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+function createCampaign(_communityId, name, description, image){
+    campaign.createCampaign(_communityId.plus(21).toString(10), web3.fromAscii(name.value), web3.fromAscii(description.value), web3.fromAscii(image.value), {value: 0, gas: 289032, gasPrice: 20000000000}, function(error, result){
         console.dir(arguments);
         if(!error){
             alert("Campanha criado com sucesso");
@@ -75,26 +71,63 @@ function createCommunity(_name, _description){
         console.dir(arguments);
         if(!error){
           alert('Comunidade Criada com Sucesso');
-          _name.value = '';
-            _description.value = '';
-            window.location.href = "addMembro.html";
+          window.location.href = "addMembro.html";
         } else {
             alert("Deu ruim");
+        }
+    });
+    return false;
+}
+
+function addMember(_communityId, _member, _name) {
+    community.addMember(_communityId.plus(21).toString(10), _member.value, web3.fromAscii(_name.value), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+      console.dir(arguments);
+      if(!error){
+          alert('Membro adicionado com Sucesso');
+          _communityId.value = '';
+          _member.value = '';
+          _name.value = '';
+      } else {
+          alert("Deu ruim");
+      }
+  });
+}
+
+function addCollaborate(campaign, collaborator, description, amount){
+    campaign.addCollaborate(campaign, collaborator, web3.fromAscii(description), web3.toBigNumber(amount), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+        console.dir(arguments);
+        if(!error){
+            alert("Colaborador adicionado com sucesso");
+        } else {
+            alert("Deu muito ruim");
         }
     });
 }
 
-function addMember(_communityId, _member, _name) {
-     community.addMember(web3.fromAscii(_communityId), web3.fromAscii(_member.value), web3.fromAscii(_name.value), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
-        console.dir(arguments);
-        if(!error){
-          alert('Membro adicionado com Sucesso');
-          _communityId.value = '';
-            _member.value = '';
-            _name.value = '';
-            //window.location.href = "index.html";
+function popularColaboradores(){
+    var count = campaign.countCampaigns(web3.eth.defaultAccount);
+    for(var i = 1; ; i++) {
+      var bigNumber = campaign.ownerToCampaigns(web3.eth.defaultAccount, i);
+        if(bigNumber.c[0] == 0){
+            break;
         } else {
-            alert("Deu ruim");
+            var camp = campaign.campaigns(bigNumber.c[0]);
+            $('#campaigns').append("<option value='"+camp[0].c[0]+"'>"+web3.toAscii(camp[3])+"</option>"
+            );
         }
+    }
+    $("#campaigns").on("change", function(){
+        popularColaboradoresSub();
     });
+    popularColaboradoresSub();
+}
+
+function popularColaboradoresSub(){
+    var campaignId = $("#campaigns").val();
+    var camp = campaign.campaigns(campaignId);
+    var communityId = camp[1].c[0]
+    console.log(communityId);
+    for(var i = 1; ; i++) {
+        
+    }
 }
