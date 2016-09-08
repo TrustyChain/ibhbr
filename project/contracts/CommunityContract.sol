@@ -7,17 +7,19 @@ contract CommunityContract {
     bytes32 description;
   }
   
-  struct CommunityMember {
+  struct Member {
     uint uuid;
-    address member;
-    uint community;
+    address owner;
+    bytes32 name;
   }
   
   Community[] public communities;
-  mapping (address => uint) public communitiesToMembers;
+  Member[] public members;
+
+  mapping (uint => uint[]) public communitiesToMembers;
   mapping (address => uint) public communitiesToOwner;
 
-  function create( bytes32 _name, bytes32 _description ){
+  function createComunity( bytes32 _name, bytes32 _description ){
     uint uuid = communities.length++;
     communities[uuid] = Community({
       uuid: uuid,
@@ -33,12 +35,26 @@ contract CommunityContract {
     _
   }
 
-  function addMember(uint communityId, address member) hasCommunity(communityId) {
-    communitiesToMembers[member] = communityId;
+  function addMember(uint communityId, address _member, bytes32 _name) hasCommunity(communityId) {
+    uint uuid = members.length++;
+    members[uuid] = Member({name: _name, owner: _member, uuid: uuid});
+    uint[] membersOfCommunty = communitiesToMembers[communityId];
+    communitiesToMembers[communityId][membersOfCommunty.length++] = uuid;
   }
 
-  function removeMember(uint communityId, address member) hasCommunity(communityId) {
-    delete communitiesToMembers[member];
+  function getMemberName(uint communityId, address _member) returns(bytes32) {
+     uint[] membersId = communitiesToMembers[communityId];
+     uint count = membersId.length++;
+     if(count > 0){
+       for(uint i = 0; i < count; i++){
+         Member current = members[membersId[i]];
+         if( current.owner == _member ){
+           return current.name;
+         }
+       }
+     }
   }
+
+  function () {throw;}
   
 }
