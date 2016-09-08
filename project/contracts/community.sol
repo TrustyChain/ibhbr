@@ -7,13 +7,14 @@ contract CommunityContract {
     bytes32 description;
   }
   
-  struct CommunityMember {
+  struct Member {
     uint uuid;
-    address member;
-    uint community;
+    address owner;
+    bytes32 name;
   }
   
   Community[] public communities;
+  Member[] public members;
   mapping (address => uint) public communitiesToMembers;
   mapping (address => uint) public communitiesToOwner;
 
@@ -33,8 +34,10 @@ contract CommunityContract {
     _
   }
 
-  function addMember(uint communityId, address member) hasCommunity(communityId) {
-    communitiesToMembers[member] = communityId;
+  function addMember(uint communityId, address _member, bytes32 _name) hasCommunity(communityId) {
+    uint uuid = members.length++;
+    members[uuid] = Member({name: _name, owner: _member, uuid: uuid});
+    communitiesToMembers[_member] = uuid;
   }
 
   function removeMember(uint communityId, address member) hasCommunity(communityId) {
