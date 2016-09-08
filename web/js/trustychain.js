@@ -70,12 +70,16 @@ alert(accountAddress[0]);
 
 web3.eth.defaultAccount = web3.eth.accounts[0];
 
-function createCommunity(){
+function createCommunity(_name, _description){
+    
 
-    community.createComunity(web3.fromAscii('_name'), web3.fromAscii('_description'), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+    community.createComunity(web3.fromAscii(_name.value), web3.fromAscii(_description.value), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
         console.dir(arguments);
+        alert('Comunidade Criada com Sucesso');
+        _name.value = '';
+        _description.value = '';
     })
 
 }
 
-createCommunity();
+//  createCommunity();
