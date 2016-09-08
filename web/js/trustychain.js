@@ -56,14 +56,25 @@ var accountAddress = web3.eth.accounts;
 
 web3.eth.defaultAccount = web3.eth.accounts[0];
 
-function createCommunity(){
-  community.createComunity(web3.fromAscii('_name'), web3.fromAscii('_description'), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+
+function createCampaign(name, description, image){
+    campaign.createComunity(communityId, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
         console.dir(arguments);
   });
 }
 
-function createCampaign(name, description, image){
-    community.createComunity(campaignId, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+function createCommunity(_name, _description){
+    community.createComunity(web3.fromAscii(_name.value), web3.fromAscii(_description.value), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
         console.dir(arguments);
-  });
+        if(!error){
+          alert('Comunidade Criada com Sucesso');
+          _name.value = '';
+            _description.value = '';
+            window.location.href = "index.html";
+        } else {
+            alert("Deu ruim");
+        }
+    })
 }
+
+//  createCommunity();
