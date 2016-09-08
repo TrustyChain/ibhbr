@@ -93,8 +93,8 @@ function addMember(_communityId, _member, _name) {
   });
 }
 
-function addCollaborate(campaign, collaborator, description, amount){
-    campaign.addCollaborate(campaign, collaborator, web3.fromAscii(description), web3.toBigNumber(amount), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+function addCollaborate(campaignSel, collaborator, description, amount){
+    campaign.addCollaborate(campaignSel.value, collaborator.value, web3.fromAscii(description.value), web3.toBigNumber(amount.value), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
         console.dir(arguments);
         if(!error){
             alert("Colaborador adicionado com sucesso");
@@ -112,22 +112,58 @@ function popularColaboradores(){
             break;
         } else {
             var camp = campaign.campaigns(bigNumber.c[0]);
-            $('#campaigns').append("<option value='"+camp[0].c[0]+"'>"+web3.toAscii(camp[3])+"</option>"
+            $('#campaignSel').append("<option value='"+camp[0].c[0]+"'>"+web3.toAscii(camp[3])+"</option>"
             );
         }
     }
-    $("#campaigns").on("change", function(){
+    $("#campaignSel").on("change", function(){
         popularColaboradoresSub();
     });
     popularColaboradoresSub();
 }
 
 function popularColaboradoresSub(){
-    var campaignId = $("#campaigns").val();
+    var campaignId = $("#campaignSel").val();
     var camp = campaign.campaigns(campaignId);
-    var communityId = camp[1].c[0]
+    var communityId = camp[1].c[0];
     console.log(communityId);
+    $('#collaborator').html("");
     for(var i = 1; ; i++) {
-        
+        var relap = community.communitiesToMembers(communityId, i);
+        if(relap.c[0] == 0){
+            break;
+        } else {
+            var member = community.members(relap.c[0]);
+            $('#collaborator').append("<option value='"+member[1]+"'>"+web3.toAscii(member[2])+"</option>"
+            );
+
+        }
     }
+}
+
+
+function populateCampaigns(){
+  for(var i = 1; ; i++) {
+      var camp = campaign.campaigns(i);
+      if(camp[0].c[0] == 0){
+          break;
+      } else {
+          $("#campaignsView").append("<div class=\"col-sm-4 portfolio-item\"><a href=\"#portfolioModal"+camp[0].c[0]+"\" class=\"portfolio-link\" data-toggle=\"modal\"><div class=\"caption\"><div class=\"caption-content\"><i class=\"fa fa-search-plus fa-3x\"></i><\/div><\/div><img src=\""+web3.toAscii(camp[5])+"\" class=\"img-responsive\" alt=\""+web3.toAscii(camp[3])+"\"><\/a><\/div>");
+
+          var strCollaborators = "";
+
+          for(var u = 1; ; u++){
+              var rel = campaign.campaignToCollaborates(camp[0].c[0], u);
+              if(rel.c[0] == 0){
+                  break;
+              } else {
+                  var coll = campaign.collaborators(rel.c[0]);
+                  console.log(coll);
+                  strCollaborators = strCollaborators + "<tr> <td>"+ web3.toAscii(coll[3]) +"<\/td><td> "+ web3.toAscii(coll[2]) +" <\/td><td> "+ coll[4].c[0] +" <\/td><\/tr>";
+              }
+          }
+
+          $("#campaignsModals").append("<div class=\"col-sm-4 portfolio-item\"><div class=\"portfolio-modal modal fade\" id=\"portfolioModal"+camp[0].c[0]+"\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\"><div class=\"modal-body\"> <h2>"+web3.toAscii(camp[3])+"<\/h2> <hr class=\"star-primary\"> <img src=\""+web3.toAscii(camp[5])+"\" class=\"img-responsive img-centered\" alt=\"\"> <p>"+web3.toAscii(camp[4])+"<\/p><div class=\"list-group\"> <a href=\"#\" class=\"list-group-item active\">Informações</a> <table class=\"table description \"> <tbody> <tr> <td class=\"text-rigth\"> Descrição </td><td class=\"text-left\"> Campanhas </td></tr><tr> <td class=\"text-rigth\"> Total Necessário </td><td class=\"text-left\"> ETH "+camp[6].c[0]+" </td></tr><tr> <td class=\"text-rigth\"> Total Doado </td><td class=\"text-left\"> ETH "+camp[7].c[0]+" <\/td><\/tr><\/tbody> <\/table> <\/div><div class=\"list-group\"> <a href=\"#\" class=\"list-group-item active\">Itens da Campanha<\/a> <div class=\"list-group-item\"> <table class=\"table \"> <thead> <tr> <th> Serviço <\/th> <th> Responsável <\/th> <th> Valor <\/th> <\/tr><\/thead> <tbody>"+ strCollaborators +"<\/tbody> <\/table> <\/div><\/div><button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\"><i class=\"fa fa-times\"></i> Close<\/button> <\/div><\/div><\/div>");
+      }
+  }
 }

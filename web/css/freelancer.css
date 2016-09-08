@@ -201,6 +201,10 @@ select {
     padding-top: 75px;
   }
 }
+
+.modal-body{
+    background: #fff;
+}
 #portfolio .portfolio-item {
   margin: 0 0 15px;
   right: 0;
