@@ -1,7 +1,11 @@
-contract communityContract {
+ contract communityContract {
+  mapping (address => uint) public communitiesToOwner;
+  function getMemberName(uint communityId, address _member) returns(bytes32) {}
 }
 
 contract CampaignContract {
+
+  communityContract public community;
 
   struct Campaign {
     uint uuid;
@@ -23,38 +27,50 @@ contract CampaignContract {
     uint amount;
   }
 
-  Campaign[] public compaigns;
+  Campaign[] public campaigns;
   Collaborator[] public collaborators;
 
   mapping (address => uint[]) public ownerToCampaigns;
   mapping (uint => uint[]) public campaignToCollaborates;
 
-  modifier isOwnerOfCommunity (communityId) {
-    if ( communityContract.communitiesToOwner[msg.sender] != communityId ) return;
+  modifier isOwnerOfCommunity (uint communityId) {
+    if ( community.communitiesToOwner(msg.sender) != communityId ) return;
     _
   }
 
-  modifier isOwnerOfCampaign (campaignId) {
+  modifier isOwnerOfCampaign (uint campaignId) {
     uint[] campaignsOfSender = ownerToCampaigns[msg.sender];
     uint count = campaignsOfSender.length;
+    bool found = false;
     if( count > 0 ){
       for( uint i = 0; i < count; i++ ){
-        if( campaignOfSender[i] == campaignId ){
-          return true;
+        if( campaignsOfSender[i] == campaignId ){
+          found = true;
+          break;
         }
       }
     }
-    return false;
+    if(!found) return;
+    _
   }
-
-  function createCampaign(uint _community, bytes32 _name, bytes32 _description, byte32 _image) isOwnerOfCommunity (_community) {
+  
+  modifier campaignIsNotDone (uint campaign) {
+    if ( campaigns[campaign].done ) return;
+    _
+  }
+  
+  function CampaignContract(communityContract _community){
+    community = _community;
+  }
+  
+  function createCampaign(uint _community, bytes32 _name, bytes32 _description, bytes32 _image) isOwnerOfCommunity (_community) {
     uint uuid = campaigns.length++;
     campaigns[uuid] = Campaign({
       uuid: uuid,
       communityId: _community,
       owner: msg.sender,
       name: _name,
-      description, _description,
+      description: _description,
       image: _image,
       amountNeed: 0,
       amountReceive: 0,
@@ -65,28 +81,31 @@ contract CampaignContract {
     ownerToCampaigns[msg.sender] = campaignsOfSender;
   }
 
-  function addCollaborate(uint _campaign, address _collaborator, bytes32 _description, uint _amount) isOwnerOfCampaign(_campaign) {
+  function addCollaborate(uint _campaign, address _collaborator, bytes32 _description, uint _amount) isOwnerOfCampaign(_campaign) campaignIsNotDone(_campaign) {
     uint uuid = collaborators.length++;
     Campaign camp = campaigns[_campaign];
-    Member member = communityContract.getMemberName(camp.communityId, _collaborator);
-    collaborators[uuid] = Collaborate({
+    bytes32 memberName = community.getMemberName(camp.communityId, _collaborator);
+    collaborators[uuid] = Collaborator({
       uuid: uuid,
-      owner: number.address,
-      name: member.name,
+      owner: _collaborator,
+      name: memberName,
       description: _description,
       amount: _amount
     });
-    camp.amountNeed += amount;
+    camp.amountNeed += _amount;
     campaigns[_campaign] = camp;
-    uint[] campaignToCollaboratesIds = campaignToCollaborates[campaign];
-    campaignToCollaborates[campaign][campaignToCollaboratesIds.length++] = uuid;
+    addCollaborateToCampaign(_campaign, uuid);
+  }
+  
+  function addCollaborateToCampaign(uint _campaign, uint _collaborate) internal {
+    uint[] campaignToCollaboratesIds = campaignToCollaborates[_campaign];
+    campaignToCollaborates[_campaign][campaignToCollaboratesIds.length++] = _collaborate;  
   }
 
-  function donateToCampaign(uint _campaign, uint amount) {
-    
+  function donateToCampaign(uint _campaign, uint amount) campaignIsNotDone(_campaign) {
   }
 
-  function concludeCampaign(uint _campaign) isOwnerOfCampaign(_campaign) {
+  function concludeCampaign(uint _campaign) isOwnerOfCampaign(_campaign) campaignIsNotDone(_campaign) {
 
   }
 
