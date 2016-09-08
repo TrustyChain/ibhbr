@@ -17,7 +17,7 @@ contract CommunityContract {
   mapping (address => uint) public communitiesToMembers;
   mapping (address => uint) public communitiesToOwner;
 
-  function create( bytes32 _name, bytes32 _description ){
+  function createComunity( bytes32 _name, bytes32 _description ){
     uint uuid = communities.length++;
     communities[uuid] = Community({
       uuid: uuid,
@@ -40,5 +40,7 @@ contract CommunityContract {
   function removeMember(uint communityId, address member) hasCommunity(communityId) {
     delete communitiesToMembers[member];
   }
+  
+  function () {throw;}
   
 }
