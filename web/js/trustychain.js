@@ -59,8 +59,13 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 var lastCommunity = community.communitiesToOwner(web3.eth.accounts[0]);
 
 function createCampaign(name, description, image){
-    campaign.createComunity(communityId, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
-        console.dir(arguments);
+    campaign.createComunity(lastCommunity, web3.fromAscii(name), web3.fromAscii(description), web3.fromAscii(image), {value: 0, gas: 428638, gasPrice: 20000000000}, function(error, result){
+        if(!error){
+            alert("Campanha criado com sucesso");
+            windown.location.href = "addColaborador.html";
+        } else {
+            alert("Deu muito ruim");
+        }
   });
 }
 
@@ -71,7 +76,7 @@ function createCommunity(_name, _description){
           alert('Comunidade Criada com Sucesso');
           _name.value = '';
             _description.value = '';
-            window.location.href = "index.html";
+            window.location.href = "addMembro.html";
         } else {
             alert("Deu ruim");
         }

@@ -54,9 +54,6 @@
                         <a href="index.html">Home</a>
                     </li>
                     </li>
-                    <li class="page-scroll">
-                        <a href="campanha.html">Nova Campanha</a>
-                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -68,7 +65,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2>Comunidade</h2>
+                    <h2>Campanha</h2>
                     <hr class="star-primary">
                 </div>
             </div>
@@ -79,14 +76,21 @@
                     <form name="sentMessage" id="contactForm" novalidate action="/">
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Nome da Comunidade</label>
-                                <input type="text" class="form-control" placeholder="Nome da Comunidade" id="nome" required data-validation-required-message="Nome da comunidade obrigatorio.">
+                                <label>Nome da Campanha</label>
+                                <input type="text" class="form-control" placeholder="Nome da Campanha" id="nome" required data-validation-required-message="Nome da campanha obrigatorio.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Descrição da Comunidade</label>
+                                <label>Imagem da Campanha</label>
+                                <input type="text" class="form-control" placeholder="Imagem da Campanha" id="imagem" required data-validation-required-message="Imagem da campanha obrigatorio.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Descrição da Campanha</label>
                                 <textarea rows="5" class="form-control" placeholder="Descrição" id="description" required data-validation-required-message="Descrição obrigatoria."></textarea>
                                 <p class="help-block text-danger"></p>
                             </div>
@@ -95,7 +99,7 @@
                         <div id="success"></div>
                         <div class="row">
                             <div class="form-group col-xs-12">
-                                <button class="btn btn-success btn-lg" onclick="createCommunity(nome, description)">Enviar</button>
+                                <button class="btn btn-success btn-lg" onclick="createCampaign(nome, description, imagem)">Enviar</button>
                             </div>
                         </div>
                     </form>
@@ -177,4 +181,4 @@
 
 </body>
 
-</html>
+<
