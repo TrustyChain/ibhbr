@@ -15,7 +15,8 @@ contract CommunityContract {
   
   Community[] public communities;
   Member[] public members;
-  mapping (address => uint) public communitiesToMembers;
+
+  mapping (uint => uint[]) public communitiesToMembers;
   mapping (address => uint) public communitiesToOwner;
 
   function createComunity( bytes32 _name, bytes32 _description ){
@@ -37,13 +38,23 @@ contract CommunityContract {
   function addMember(uint communityId, address _member, bytes32 _name) hasCommunity(communityId) {
     uint uuid = members.length++;
     members[uuid] = Member({name: _name, owner: _member, uuid: uuid});
-    communitiesToMembers[_member] = uuid;
+    uint[] membersOfCommunty = communitiesToMembers[communityId];
+    communitiesToMembers[communityId][membersOfCommunty.length++] = uuid;
   }
 
-  function removeMember(uint communityId, address member) hasCommunity(communityId) {
-    delete communitiesToMembers[member];
+  function getMemberName(uint communityId, address _member) returns(bytes32) {
+     uint[] membersId = communitiesToMembers[communityId];
+     uint count = membersId.length++;
+     if(count > 0){
+       for(uint i = 0; i < count; i++){
+         Member current = members[membersId[i]];
+         if( current.owner == _member ){
+           return current.name;
+         }
+       }
+     }
   }
-  
+
   function () {throw;}
   
 }
