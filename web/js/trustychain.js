@@ -126,7 +126,6 @@ function popularColaboradoresSub(){
     var campaignId = $("#campaignSel").val();
     var camp = campaign.campaigns(campaignId);
     var communityId = camp[1].c[0];
-    console.log(communityId);
     $('#collaborator').html("");
     for(var i = 1; ; i++) {
         var relap = community.communitiesToMembers(communityId, i);
@@ -158,7 +157,6 @@ function populateCampaigns(){
                   break;
               } else {
                   var coll = campaign.collaborators(rel.c[0]);
-                  console.log(coll);
                   strCollaborators = strCollaborators + "<tr> <td>"+ web3.toAscii(coll[3]) +"<\/td><td> "+ web3.toAscii(coll[2]) +" <\/td><td> "+ coll[4].c[0] +" <\/td><\/tr>";
               }
           }
